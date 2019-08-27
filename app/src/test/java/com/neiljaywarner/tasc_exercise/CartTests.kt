@@ -7,6 +7,7 @@ import com.neiljaywarner.tasc_exercise.cart.model.basket3
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.math.BigDecimal
 
 class CartTests {
 
@@ -14,32 +15,32 @@ class CartTests {
     // Sales tax is rounded up to the *nearest* multiple of $0.05. This rounding is done by item, by type of tax (basic sales and import duty)
     @Test
     fun basket1SalesTax() {
-        assertEquals(10.00, basket1.calculateTotalSalesTax(), 0.001)
+        assertEquals(BigDecimal("10"), basket1.calculateTotalSalesTax())
     }
 
     @Test
     fun basket1Total() {
-        assertEquals(126.98, basket1.calculateTotal(), 0.001)
+        assertEquals(BigDecimal("126.98"), basket1.calculateTotal())
     }
 
     @Test
     fun basket2SalesTax() {
-        assertEquals(2250.8, basket2.calculateTotalSalesTax(), 0.001)
+        assertEquals(BigDecimal("2250.80"), basket2.calculateTotalSalesTax())
     }
 
     @Test
     fun basket2Total() {
-        assertEquals(17263.05, basket2.calculateTotal(), 0.001)
+        assertEquals(BigDecimal("17263.05"), basket2.calculateTotal())
     }
 
     @Test
     fun basket3SalesTax() {
-        assertEquals(10.8, basket3.calculateTotalSalesTax(), 0.001)
+        assertEquals(BigDecimal("10.8"), basket3.calculateTotalSalesTax())
     }
 
     @Test
     fun basket3Total() {
-        assertEquals(1149.7, basket3.calculateTotal(), 0.001)
+        assertEquals(BigDecimal("1149.7"), basket3.calculateTotal().stripTrailingZeros())
     }
 
 }

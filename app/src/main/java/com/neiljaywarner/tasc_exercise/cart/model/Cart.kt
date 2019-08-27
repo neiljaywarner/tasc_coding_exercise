@@ -1,44 +1,63 @@
 package com.neiljaywarner.tasc_exercise.cart.model
 
 import java.math.BigDecimal
-import java.math.BigInteger
-import java.math.MathContext
 import kotlin.math.ceil
 
 data class Cart(val cartItems: List<CartItem>) {
-    fun calculateTotalSalesTax() : Double {
-        //TODO: Calculate sales tax
-        return cartItems.sumByDouble {
-            it.importTax + it.salesTax
+
+    fun calculateTotalSalesTax() : BigDecimal {
+        var totalSalesTax = BigDecimal.ZERO
+        cartItems.forEach {
+            println("name=${it.itemName}")
+            println("salestax=${it.salesTax}")
+            println("import tax = ${it.importTax}")
+            totalSalesTax += it.salesTax + it.importTax
+            println("-------totalsalestax=$totalSalesTax")
+
         }
+        return totalSalesTax
     }
 
-    //TODO: Caculate
-    fun calculateTotal() : Double = Double.MAX_VALUE
+    fun calculateTotal() : BigDecimal {
+        var total = BigDecimal.ZERO
+        cartItems.forEach {
+            println("name=${it.itemName}")
+            println("salestax=${it.salesTax}")
+            println("import tax = ${it.importTax}")
+            total += it.price + it.salesTax + it.importTax
+            println("-------totalsalestax=$total")
+
+        }
+        return total
+    }
+
+
+
+
 }
 
 fun getBasket(basketNum: Int) : Cart = when (basketNum) {
-    1 -> Cart(listOf(CartItem("item1", 1.2)))
-    2 -> Cart(listOf(CartItem("item2", 3.2)))
-    else -> Cart(listOf(CartItem("item3.1", 3.2), CartItem("item3.2", 1.2)))
+    1 -> basket1
+    2 -> basket2
+    else -> basket3
 }
 
 // Note: We could consider JodaMoney
-data class CartItem(val itemName: String, val price: Double, val isImported: Boolean = false, val isExempt: Boolean = false) {
-    val importTax : Double
+data class CartItem(val itemName: String, val price: BigDecimal, val isImported: Boolean = false, val isExempt: Boolean = false) {
+    val importTax : BigDecimal
         get() {
             return if (isImported) {
-                (price * 0.05).roundUpNickel()
+                (price * BigDecimal("0.05")).roundUpNickel()
             } else {
-                0.0
+                BigDecimal.ZERO
             }
         }
-    val salesTax : Double
+    val salesTax : BigDecimal
         get() {
             return if (isExempt) {
-                0.0
+                BigDecimal.ZERO
             } else {
-                (price * 0.10).roundUpNickel()
+                (price * BigDecimal("0.10")).roundUpNickel()
             }
         }
 
@@ -47,39 +66,34 @@ data class CartItem(val itemName: String, val price: Double, val isImported: Boo
 // convert to integer pennies
 // then round up 1,2,3,4,5 to 5 to 5, 6,7,8,9,0 to 0 (+ in prev column)
 // TODO: Refactor this with confidence becauase of unit test.
-fun Double.roundUpNickel() : Double {
-    val pennies = this.toPennies()
-    val nickels = ceil(pennies / 5.0).toBigDecimal()
-    val roundedCents = nickels * BigDecimal("5")
-    return roundedCents.toDouble() / 100.0
-
+fun BigDecimal.roundUpNickel() : BigDecimal {
+    val pennies = this.dollarsToPenniesRoundedUp()
+    println(pennies.toPlainString())
+    val nickels = pennies.penniesToNickelsRoundedUp()
+    println(nickels.toPlainString())
+    return nickels * BigDecimal("5.0").movePointLeft(2).stripTrailingZeros()
 }
 
-fun Double.toPennies() : Int = ceil(this*100).toInt()
+fun BigDecimal.dollarsToPenniesRoundedUp() : BigDecimal = ceil(this.toDouble()*100.0).toBigDecimal().stripTrailingZeros()
+fun BigDecimal.penniesToNickelsRoundedUp() : BigDecimal = ceil(this.toDouble() / 5.0).toBigDecimal().stripTrailingZeros()
 
 // ***** Dummy Values
 // ** Important note: Quantity is ignored for time's sake, everything considered qty: 1
-val skittles = CartItem("1 16lb bag of Skittles: 16.00", 16.00, isExempt = true)
-val walkman = CartItem("1 Walkman", 99.99) // tax $10
-val popcorn = CartItem("1 bag of microwave popcorn", 0.99)
+val skittles = CartItem("1 16lb bag of Skittles: 16.00", BigDecimal(16.00), isExempt = true)
+val walkman = CartItem("1 Walkman", BigDecimal("99.99")) // tax $10
+val popcorn = CartItem("1 bag of microwave popcorn", BigDecimal("0.99"), isExempt = true)
 
 val basket1 = Cart(listOf(skittles, walkman, popcorn))
 
-val coffee = CartItem("1 imported bag of Vanilla-Hazelnut Coffee", 11.00, isImported = true)
-val vespa = CartItem("1 Imported Vespa", 15001.25, isImported = true)
+val coffee = CartItem("1 imported bag of Vanilla-Hazelnut Coffee", BigDecimal("11.00"), isImported = true, isExempt = true)
+val vespa = CartItem("1 Imported Vespa", BigDecimal("15001.25"), isImported = true)
 
 val basket2 = Cart(listOf(coffee, vespa))
 
-/*
-Shopping Basket 3:
-1 imported crate of Almond Snickers at 75.99 1 Discman at 55.00
-1 Imported Bottle of Wine at 10.00
-1 300# bag of Fair-Trade Coffee at 997.99
+val importedSnickers = CartItem("1 imported crate of Almond Snickers", BigDecimal("75.99"), isImported = true)
+val importedWine = CartItem("1 Imported Bottle of Wine", BigDecimal("10.00"), isImported = true)
+val fairTradeCoffee = CartItem("1 300# bag of Fair-Trade Coffee", BigDecimal("997.99"), isExempt = true)
+val discMan = CartItem("1 Discman", BigDecimal("55.00"))
 
- */
-val importedSnickers = CartItem("1 imported crate of Almond Snickers", 75.99, isImported = true)
-val importedWine = CartItem("1 Imported Bottle of Wine", 10.00, isImported = true)
-val fairTradeCoffee = CartItem("1 300# bag of Fair-Trade Coffee", 997.99, isExempt = true)
-
-val basket3 = Cart(listOf(importedSnickers, importedWine, fairTradeCoffee))
+val basket3 = Cart(listOf(importedSnickers, discMan, importedWine, fairTradeCoffee))
 
