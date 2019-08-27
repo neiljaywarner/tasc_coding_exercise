@@ -35,12 +35,12 @@ class CartTests {
 
     @Test
     fun basket3SalesTax() {
-        assertEquals(BigDecimal("10.8"), basket3.calculateTotalSalesTax())
+        assertEquals(BigDecimal("10.80"), basket3.calculateTotalSalesTax())
     }
 
     @Test
     fun basket3Total() {
-        assertEquals(BigDecimal("1149.7"), basket3.calculateTotal().stripTrailingZeros())
+        assertEquals(BigDecimal("1149.78"), basket3.calculateTotal())
     }
 
 }

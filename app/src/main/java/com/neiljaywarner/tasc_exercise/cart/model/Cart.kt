@@ -90,7 +90,7 @@ val vespa = CartItem("1 Imported Vespa", BigDecimal("15001.25"), isImported = tr
 
 val basket2 = Cart(listOf(coffee, vespa))
 
-val importedSnickers = CartItem("1 imported crate of Almond Snickers", BigDecimal("75.99"), isImported = true)
+val importedSnickers = CartItem("1 imported crate of Almond Snickers", BigDecimal("75.99"), isImported = true, isExempt = true)
 val importedWine = CartItem("1 Imported Bottle of Wine", BigDecimal("10.00"), isImported = true)
 val fairTradeCoffee = CartItem("1 300# bag of Fair-Trade Coffee", BigDecimal("997.99"), isExempt = true)
 val discMan = CartItem("1 Discman", BigDecimal("55.00"))
