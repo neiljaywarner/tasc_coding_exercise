@@ -6,7 +6,7 @@ import kotlin.math.ceil
 
 data class Cart(val cartItems: List<CartItem>) {
 
-    val format = NumberFormat.getCurrencyInstance()
+    private val format : NumberFormat = NumberFormat.getCurrencyInstance()
 
     val salesTaxDisplayString: String
         get() = format.format(calculateTotalSalesTax().toDouble())

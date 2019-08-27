@@ -7,10 +7,11 @@ import com.neiljaywarner.tasc_exercise.cart.model.Cart
 import com.neiljaywarner.tasc_exercise.cart.model.getCart
 
 class CartViewModel : ViewModel() {
+    private val _cart = MutableLiveData<Cart>()
+    val cart: LiveData<Cart> = _cart
+
     fun loadBasketNumber(basketNumber: Int) {
         _cart.value = getCart(basketNumber)
     }
 
-    private val _cart = MutableLiveData<Cart>()
-    val cart: LiveData<Cart> = _cart
 }

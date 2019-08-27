@@ -10,7 +10,7 @@ import com.neiljaywarner.tasc_exercise.extensions.inflate
 import kotlinx.android.synthetic.main.row_cart_item.view.*
 import java.text.NumberFormat
 
-class CartRecyclerAdapter(val cart: Cart) : RecyclerView.Adapter<CartRecyclerAdapter.ViewHolder>() {
+class CartRecyclerAdapter(private val cart: Cart) : RecyclerView.Adapter<CartRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(parent.inflate(R.layout.row_cart_item))
 
