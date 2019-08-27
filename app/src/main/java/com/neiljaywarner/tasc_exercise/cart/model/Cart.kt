@@ -1,5 +1,10 @@
 package com.neiljaywarner.tasc_exercise.cart.model
 
+import java.math.BigDecimal
+import java.math.BigInteger
+import java.math.MathContext
+import kotlin.math.ceil
+
 data class Cart(val cartItems: List<CartItem>) {
     fun calculateTotalSalesTax() : Double {
         //TODO: Calculate sales tax
@@ -18,11 +23,12 @@ fun getBasket(basketNum: Int) : Cart = when (basketNum) {
     else -> Cart(listOf(CartItem("item3.1", 3.2), CartItem("item3.2", 1.2)))
 }
 
+// Note: We could consider JodaMoney
 data class CartItem(val itemName: String, val price: Double, val isImported: Boolean = false, val isExempt: Boolean = false) {
     val importTax : Double
         get() {
             return if (isImported) {
-                33.33
+                (price * 0.05).roundUpNickel()
             } else {
                 0.0
             }
@@ -32,11 +38,24 @@ data class CartItem(val itemName: String, val price: Double, val isImported: Boo
             return if (isExempt) {
                 0.0
             } else {
-                77.77
+                (price * 0.10).roundUpNickel()
             }
         }
 
 }
+
+// convert to integer pennies
+// then round up 1,2,3,4,5 to 5 to 5, 6,7,8,9,0 to 0 (+ in prev column)
+// TODO: Refactor this with confidence becauase of unit test.
+fun Double.roundUpNickel() : Double {
+    val pennies = this.toPennies()
+    val nickels = ceil(pennies / 5.0).toBigDecimal()
+    val roundedCents = nickels * BigDecimal("5")
+    return roundedCents.toDouble() / 100.0
+
+}
+
+fun Double.toPennies() : Int = ceil(this*100).toInt()
 
 // ***** Dummy Values
 // ** Important note: Quantity is ignored for time's sake, everything considered qty: 1
@@ -60,7 +79,7 @@ Shopping Basket 3:
  */
 val importedSnickers = CartItem("1 imported crate of Almond Snickers", 75.99, isImported = true)
 val importedWine = CartItem("1 Imported Bottle of Wine", 10.00, isImported = true)
-val fairTradeCoffee = CartItem("1 300# bag of Fair-Trade Coffee", 997.99)
+val fairTradeCoffee = CartItem("1 300# bag of Fair-Trade Coffee", 997.99, isExempt = true)
 
 val basket3 = Cart(listOf(importedSnickers, importedWine, fairTradeCoffee))
 
