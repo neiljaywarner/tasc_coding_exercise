@@ -55,6 +55,12 @@ class CartItemTests {
     }
 
     @Test
+    fun importedCoffee_tax_is_correct() {
+        val tax = coffee.importTax + coffee.salesTax
+        assertEquals(BigDecimal("0.55"), tax)
+    }
+
+    @Test
     fun roundUpNickel() {
         assertEquals(BigDecimal("0.05"), BigDecimal("0.04").roundUpNickel())
         assertEquals(BigDecimal("2.0"), BigDecimal("1.98").roundUpNickel())

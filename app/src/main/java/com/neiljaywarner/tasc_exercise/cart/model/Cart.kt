@@ -68,13 +68,13 @@ data class CartItem(val itemName: String, val price: BigDecimal, val isImported:
 // TODO: Refactor this with confidence becauase of unit test.
 fun BigDecimal.roundUpNickel() : BigDecimal {
     val pennies = this.dollarsToPenniesRoundedUp()
-    println(pennies.toPlainString())
+    println("pennies = ${pennies.toPlainString()}")
     val nickels = pennies.penniesToNickelsRoundedUp()
-    println(nickels.toPlainString())
+    println("nickels = ${nickels.toPlainString()}")
     return nickels * BigDecimal("5.0").movePointLeft(2).stripTrailingZeros()
 }
 
-fun BigDecimal.dollarsToPenniesRoundedUp() : BigDecimal = ceil(this.toDouble()*100.0).toBigDecimal().stripTrailingZeros()
+fun BigDecimal.dollarsToPenniesRoundedUp() : BigDecimal = this*BigDecimal("100").stripTrailingZeros()
 fun BigDecimal.penniesToNickelsRoundedUp() : BigDecimal = ceil(this.toDouble() / 5.0).toBigDecimal().stripTrailingZeros()
 
 // ***** Dummy Values
