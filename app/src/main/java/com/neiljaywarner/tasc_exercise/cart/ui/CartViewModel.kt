@@ -3,14 +3,14 @@ package com.neiljaywarner.tasc_exercise.cart.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.neiljaywarner.tasc_exercise.cart.model.Cart
+import com.neiljaywarner.tasc_exercise.cart.model.getCart
 
 class CartViewModel : ViewModel() {
     fun loadBasketNumber(basketNumber: Int) {
-        _text.value = "Load basket number $basketNumber"
+        _cart.value = getCart(basketNumber)
     }
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "Empty Cart"
-    }
-    val text: LiveData<String> = _text
+    private val _cart = MutableLiveData<Cart>()
+    val cart: LiveData<Cart> = _cart
 }

@@ -3,4 +3,6 @@
     <string name="title_basket_1">Basket 1</string>
     <string name="title_basket_2">Basket 2</string>
     <string name="title_basket_3">Basket 3</string>
+    <string name="sales_taxes">Sales Taxes:</string>
+    <string name="total">Total:</string>
 </resources>

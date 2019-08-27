@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.neiljaywarner.tasc_exercise.cart.ui.CartFragment"
         android:label="@string/title_basket_1"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_cart" >
 
         <argument
             android:name="basketNumber"
@@ -21,7 +21,7 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.neiljaywarner.tasc_exercise.cart.ui.CartFragment"
         android:label="@string/title_basket_2"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_cart" >
 
         <argument
             android:name="basketNumber"
@@ -34,7 +34,7 @@
         android:id="@+id/navigation_notifications"
         android:name="com.neiljaywarner.tasc_exercise.cart.ui.CartFragment"
         android:label="@string/title_basket_3"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_cart" >
 
         <argument
             android:name="basketNumber"

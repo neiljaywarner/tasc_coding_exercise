@@ -1,19 +1,23 @@
 package com.neiljaywarner.tasc_exercise.cart.model
 
 import java.math.BigDecimal
+import java.text.NumberFormat
 import kotlin.math.ceil
 
 data class Cart(val cartItems: List<CartItem>) {
 
+    val format = NumberFormat.getCurrencyInstance()
+
+    val salesTaxDisplayString: String
+        get() = format.format(calculateTotalSalesTax().toDouble())
+
+    val totalDisplayString: String
+        get() = format.format(calculateTotal().toDouble())
+
     fun calculateTotalSalesTax() : BigDecimal {
         var totalSalesTax = BigDecimal.ZERO
         cartItems.forEach {
-            println("name=${it.itemName}")
-            println("salestax=${it.salesTax}")
-            println("import tax = ${it.importTax}")
             totalSalesTax += it.salesTax + it.importTax
-            println("-------totalsalestax=$totalSalesTax")
-
         }
         return totalSalesTax
     }
@@ -21,22 +25,15 @@ data class Cart(val cartItems: List<CartItem>) {
     fun calculateTotal() : BigDecimal {
         var total = BigDecimal.ZERO
         cartItems.forEach {
-            println("name=${it.itemName}")
-            println("salestax=${it.salesTax}")
-            println("import tax = ${it.importTax}")
             total += it.price + it.salesTax + it.importTax
-            println("-------totalsalestax=$total")
 
         }
         return total
     }
 
-
-
-
 }
 
-fun getBasket(basketNum: Int) : Cart = when (basketNum) {
+fun getCart(basketNum: Int) : Cart = when (basketNum) {
     1 -> basket1
     2 -> basket2
     else -> basket3
@@ -45,21 +42,20 @@ fun getBasket(basketNum: Int) : Cart = when (basketNum) {
 // Note: We could consider JodaMoney
 data class CartItem(val itemName: String, val price: BigDecimal, val isImported: Boolean = false, val isExempt: Boolean = false) {
     val importTax : BigDecimal
-        get() {
-            return if (isImported) {
-                (price * BigDecimal("0.05")).roundUpNickel()
-            } else {
-                BigDecimal.ZERO
-            }
+        get() = if (isImported) {
+            (price * BigDecimal("0.05")).roundUpNickel()
+        } else {
+            BigDecimal.ZERO
         }
     val salesTax : BigDecimal
-        get() {
-            return if (isExempt) {
-                BigDecimal.ZERO
-            } else {
-                (price * BigDecimal("0.10")).roundUpNickel()
-            }
+        get() = if (isExempt) {
+            BigDecimal.ZERO
+        } else {
+            (price * BigDecimal("0.10")).roundUpNickel()
         }
+
+    val displayDescription
+        get() = "$itemName:"
 
 }
 
@@ -79,7 +75,7 @@ fun BigDecimal.penniesToNickelsRoundedUp() : BigDecimal = ceil(this.toDouble() /
 
 // ***** Dummy Values
 // ** Important note: Quantity is ignored for time's sake, everything considered qty: 1
-val skittles = CartItem("1 16lb bag of Skittles: 16.00", BigDecimal(16.00), isExempt = true)
+val skittles = CartItem("1 16lb bag of Skittles", BigDecimal(16.00), isExempt = true)
 val walkman = CartItem("1 Walkman", BigDecimal("99.99")) // tax $10
 val popcorn = CartItem("1 bag of microwave popcorn", BigDecimal("0.99"), isExempt = true)
 
